@@ -1,4 +1,7 @@
+import CompanionsList from "@/components/CompanionsList";
 import CompanionCard from "@/components/ui/CompanionCard";
+import { recentSessions } from "@/constants";
+import CTA from "@/components/CTA"; // 이 줄을 추가하면 'Cannot find name' 에러가 사라집니다!
 
 const Page = () => {
   return (
@@ -33,9 +36,18 @@ const Page = () => {
           color="#BDE7FF"
         />
       </section>
-      
-    </main>
+
+    <section className="home-section">
+      {/* 1. title 뒤에 있던 '>'를 지우고 속성들을 깔끔하게 정렬했습니다. */}
+      <CompanionsList
+        title="Recent completed Sessions"
+        companions={recentSessions}
+        className="w-2/3 max-lg:w-full"
+      />
+      <CTA />
+    </section>
+  </main>
   );
 };
 
-export default Page;
+export default Page; 

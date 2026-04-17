@@ -1,17 +1,17 @@
+"use client";
+
 import Link from "next/link"; 
 import Image from 'next/image';
-
-const NavItems = () => {
-    return (
-        <div className="flex items-center gap-8">
-            <p className="cursor-pointer hover:text-blue-500">Home</p>
-            <p className="cursor-pointer hover:text-blue-500">Companions</p>
-            <p className="cursor-pointer hover:text-blue-500">Problems</p>
-        </div>
-    );
-};
+import { 
+  SignInButton, 
+  UserButton,
+  useUser
+} from "@clerk/nextjs"; 
+import NavItems from "@/components/NavItems";
 
 const Navbar = () => {
+    const { user } = useUser();
+
     return (
         <nav className="flex justify-between items-center p-4">
             <Link href="/">
@@ -24,9 +24,23 @@ const Navbar = () => {
                     />
                 </div>
             </Link>
+
             <div className="flex items-center gap-8">
                 <NavItems />
-                <p className="cursor-pointer">Sign In</p>  
+                
+                {/* 로그아웃 상태일 때: Sign In 버튼 표시 */}
+                {!user && (
+                    <SignInButton mode="modal">
+                        <button className="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded-md">
+                            Sign In
+                        </button>
+                    </SignInButton>
+                )}
+
+                {/* 로그인 상태일 때: 사용자 프로필 버튼 표시 */}
+                {user && (
+                    <UserButton />
+                )}
             </div>
         </nav>
     );
