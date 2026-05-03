@@ -25,6 +25,7 @@ import {
 } from "./ui/select";
 import { subjects, voices } from "@/constants";
 import { createCompanion } from "@/lib/actions/companion.actions";
+import type { CreateCompanion } from "@/types";
 
 // 1. 설계도
 const formSchema = z.object({
@@ -41,6 +42,18 @@ type CompanionFormValues = z.infer<typeof formSchema>;
 const CompanionForm = () => {
   const router = useRouter(); // 페이지 이동을 위한 도구
 
+  const buildCompanionQuery = (values: CompanionFormValues) => {
+    const params = new URLSearchParams({
+      name: values.name,
+      subject: values.subject,
+      topic: values.topic,
+      duration: String(values.duration),
+      voice: values.voice,
+      style: values.style,
+    });
+    return `/companions?${params.toString()}`;
+  };
+
   const form = useForm<CompanionFormValues>({
     resolver: zodResolver(formSchema) as Resolver<CompanionFormValues>,
     defaultValues: {
@@ -55,25 +68,40 @@ const CompanionForm = () => {
 
 const onSubmit = async (values: CompanionFormValues) => {
   try {
-    // 1. 서버(createCompanion)가 요구하는 서식(CreateCompanion 타입)에 맞춰 변환
-    const formattedData = {
+    // 폼 값을 앱 표준 Companion 생성 페이로드로 전달합니다.
+    const formattedData: CreateCompanion = {
       name: values.name,
-      description: values.topic,          // topic을 description으로 사용
-      instructions: values.topic,         // 일단 topic을 지시사항으로도 사용 (나중에 상세화 가능)
-      seed: values.style,                 // style을 seed(어조)로 사용
-      src: "/images/placeholder.png",     // 임시 이미지 경로 (나중에 업로드 기능 넣으실 거예요)
-      categoryId: values.subject,         // subject를 categoryId로 매칭
+      subject: values.subject,
+      topic: values.topic,
+      duration: values.duration,
+      voice: values.voice,
+      style: values.style,
     };
 
-    // 2. 이제 변환된 데이터를 서버로 보냅니다.
-    const companion = await createCompanion(formattedData);
+    // 2. 서버 응답이 지연될 경우를 대비해 타임아웃을 둡니다.
+    const timeoutPromise = new Promise<null>((resolve) => {
+      setTimeout(() => resolve(null), 7000);
+    });
+
+    const companion = (await Promise.race([
+      createCompanion(formattedData),
+      timeoutPromise,
+    ])) as Awaited<ReturnType<typeof createCompanion>> | null;
 
     if (companion) {
-      router.push(`/companions/${companion.id}`);
-      router.refresh();
+      if (companion.id.startsWith("local-")) {
+        router.push(buildCompanionQuery(values));
+      } else {
+        router.push(`/companions/${companion.id}`);
+      }
+      return;
     }
+
+    // 타임아웃 또는 null 응답이면 입력값 기반으로 바로 이동시켜 UX 정체를 방지합니다.
+    router.push(buildCompanionQuery(values));
   } catch (error) {
     console.error("데이터 저장 실패:", error);
+    router.push(buildCompanionQuery(values));
   }
 };
 

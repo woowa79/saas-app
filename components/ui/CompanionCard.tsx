@@ -20,8 +20,8 @@ const CompanionCard = ({id, name, topic, subject, duration, color}: CompanionCar
                 </button>
             </div>
             
-            <h2 className="text-2xl font-bold mt-4">{name}</h2>
-            <p className="text-sm opacity-80">{topic}</p>
+            <h2 className="text-xl font-bold mt-4 whitespace-nowrap">{name}</h2>
+            <p className="text-sm opacity-80 whitespace-nowrap">{topic}</p>
             
             <div className="flex items-center gap-2 mt-4">
                 <Image src="/icons/clock.svg" alt="duration" width={13} height={13} />

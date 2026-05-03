@@ -5,7 +5,7 @@
 //   accountId: string;
 // };
 
-enum Subject {
+export enum Subject {
   maths = "maths",
   language = "language",
   science = "science",
@@ -17,61 +17,62 @@ enum Subject {
   business = "business",
 }
 
-type Companion = Models.DocumentList<Models.Document> & {
-  $id: string;
-  name: string;
-  subject: Subject;
-  topic: string;
-  duration: number;
-  bookmarked: boolean;
-};
-
-interface CreateCompanion {
+export type Companion = {
+  id: string;
   name: string;
   subject: string;
   topic: string;
+  duration: number;
+  bookmarked: boolean;
   voice: string;
   style: string;
+};
+
+export interface CreateCompanion {
+  name: string;
+  subject: string;
+  topic: string;
   duration: number;
+  voice: string;
+  style: string;
 }
 
-interface GetAllCompanions {
+export interface GetAllCompanions {
   limit?: number;
   page?: number;
   subject?: string | string[];
   topic?: string | string[];
 }
 
-interface BuildClient {
+export interface BuildClient {
   key?: string;
   sessionToken?: string;
 }
 
-interface CreateUser {
+export interface CreateUser {
   email: string;
   name: string;
   image?: string;
   accountId: string;
 }
 
-interface SearchParams {
+export interface SearchParams {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-interface Avatar {
+export interface Avatar {
   userName: string;
   width: number;
   height: number;
   className?: string;
 }
 
-
-interface SavedMessage {
+export interface SavedMessage {
   role: "user" | "system" | "assistant";
   content: string;
 }
 
-interface CompanionComponentProps {
+export interface CompanionComponentProps {
   companionId: string;
   subject: string;
   topic: string;

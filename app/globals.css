@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap");
 @import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -42,19 +39,14 @@
   --sidebar-ring: oklch(0.708 0 0);
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
-=======
-@import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
->>>>>>> 493bc64d5deffc19f1f414b4b91361812849a819
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-<<<<<<< HEAD
+
   --color-primary: var(--primary);
   --color-cta: var(--cta);
   --color-cta-gold: var(--cta-gold);
@@ -157,13 +149,13 @@ body {
 
 @layer components {
   .home-section {
-    @apply flex gap-4 justify-between items-start w-full max-lg:flex-col-reverse max-lg:items-center;
+    @apply flex gap-4 justify-between items-stretch w-full max-lg:flex-col-reverse max-lg:items-center;
   }
   .companions-grid {
     @apply flex flex-wrap gap-4 w-full max-md:justify-center;
   }
   .companion-card {
-    @apply flex flex-col rounded-4xl border border-black px-4 py-4 gap-5 w-full min-lg:max-w-[410px] justify-between;
+    @apply flex flex-col rounded-4xl border border-black px-4 py-4 gap-5 w-full lg:max-w-[410px] justify-between min-h-[300px];
   }
   .subject-badge {
     @apply bg-black text-white rounded-4xl text-sm px-2 py-1 capitalize;
@@ -178,7 +170,7 @@ body {
     @apply rounded-4xl border border-black;
   }
   .cta-section {
-    @apply bg-cta text-white rounded-4xl px-7 py-10 flex flex-col items-center text-center gap-5 w-1/3 max-lg:w-1/2 max-md:w-full;
+    @apply bg-cta text-white rounded-4xl px-7 py-7 flex h-full flex-col items-center text-center gap-4 w-1/3 max-lg:w-1/2 max-md:w-full;
   }
   .cta-badge {
     @apply bg-cta-gold rounded-4xl px-3 py-1.5 text-black;
@@ -204,7 +196,69 @@ body {
   }
 
   .companion-avatar {
-    @apply size-[300px] flex items-center justify-center rounded-lg max-sm:size-[100px] mt-4;
+    @apply size-[300px] flex items-center justify-center rounded-lg max-sm:size-[100px] mt-4 relative overflow-hidden;
+  }
+
+  .companion-avatar img {
+    transition: opacity 0.3s ease;
+    opacity: 1;
+  }
+
+  .companion-avatar-speaking img {
+    opacity: 0 !important;
+    transition: opacity 0.2s ease;
+  }
+
+  .companion-avatar-speaking::after {
+    content: "";
+    position: absolute;
+    inset: 10px;
+    border-radius: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    animation: avatar-pulse 0.8s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  .voice-bars {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    transition: bottom 0.3s ease, transform 0.3s ease;
+  }
+
+  .voice-bars-speaking {
+    bottom: 50%;
+    transform: translateX(-50%) translateY(50%);
+  }
+
+  .voice-bar {
+    width: 6px;
+    height: 16px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.85);
+    transition: height 0.2s ease, opacity 0.2s ease, width 0.3s ease;
+    opacity: 0.7;
+  }
+
+  .voice-bars-speaking .voice-bar {
+    width: 10px;
+    opacity: 1;
+  }
+
+  .voice-bar-active {
+    animation: voice-bar 0.65s ease-in-out infinite alternate;
+    opacity: 1;
+  }
+
+  .voice-bar-active:nth-child(2) {
+    animation-delay: 0.12s;
+  }
+
+  .voice-bar-active:nth-child(3) {
+    animation-delay: 0.24s;
   }
   .companion-lottie {
     @apply size-[300px] max-sm:size-[100px];
@@ -222,13 +276,22 @@ body {
   }
 
   .transcript {
-    @apply relative flex flex-col gap-4 w-full items-center pt-10 flex-grow overflow-hidden;
+    @apply relative flex flex-col gap-4 w-full items-center pt-6 mt-2;
   }
   .transcript-message {
-    @apply overflow-y-auto w-full flex flex-col gap-4 max-sm:gap-2 pr-2 h-full text-2xl;
+    @apply overflow-y-auto w-full flex flex-col gap-4 max-sm:gap-2 pr-2 text-2xl max-h-[220px];
   }
   .transcript-fade {
-    @apply pointer-events-none absolute bottom-0 left-0 right-0 h-40 max-sm:h-20 bg-gradient-to-t from-background via-background/90 to-transparent z-10;
+    @apply pointer-events-none absolute bottom-0 left-0 right-0 h-24 max-sm:h-16 bg-gradient-to-t from-background via-background/90 to-transparent z-10;
+  }
+}
+
+@keyframes voice-bar {
+  from {
+    height: 12px;
+  }
+  to {
+    height: 28px;
   }
 }
 
@@ -241,21 +304,14 @@ body {
     scrollbar-width: none;
   }
 }
-=======
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes avatar-pulse {
+  from {
+    opacity: 0.5;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.02);
   }
 }
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
->>>>>>> 493bc64d5deffc19f1f414b4b91361812849a819

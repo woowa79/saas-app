@@ -1,3 +1,12 @@
+export const subjects = [
+  "maths",
+  "language",
+  "science",
+  "history",
+  "coding",
+  "economics",
+];
+
 // 1. 과목별 색상 설정
 export const subjectsColors = {
   science: "#E5D0FF",

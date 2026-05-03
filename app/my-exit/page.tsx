@@ -1,10 +1,6 @@
-import React from 'react'
-import Page from '../companions/new/page';
-
-const profilepage = () => {
-    return (
-        <div>MyExitPage</div>
-    );
+import { redirect } from "next/navigation";
+const MyExitPage = () => {
+    redirect("/my-journey");
 };
 
-export default Page;
+export default MyExitPage;
